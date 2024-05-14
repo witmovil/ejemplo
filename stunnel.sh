@@ -1,44 +1,44 @@
 #!/bin/bash
 # Instalación automática de Debian
-# Creado por WitMovil
+# Creado por Idtunnel
 
 # Detalles de la empresa
-país=CO
-estado=Bogota
-localidad=Bogota
-organización=witssh
-unidadorganizativa=WitSSH
-nombrecorporativo=WitMovil.com
-correo=admin@witmovil.com
+country=CO
+state=Bogota
+locality=Bogota
+organization=witmovil
+organizationalunit=WitMovil
+commonname=witmovil.com
+email=admin@witmovil.com
 
 # Instalar stunnel
 apt-get install stunnel4 -y
-cat > /etc/stunnel/stunnel.conf <<-FIN
+cat > /etc/stunnel/stunnel.conf <<-END
 cert = /etc/stunnel/stunnel.pem
 client = no
 socket = a:SO_REUSEADDR=1
 socket = l:TCP_NODELAY=1
 socket = r:TCP_NODELAY=1
 [dropbear]
-aceptar = 443
-conectar = 127.0.0.1:143
+accept = 443
+connect = 127.0.0.1:143
 [dropbear]
-aceptar = 222
-conectar = 127.0.0.1:22
+accept = 222
+connect = 127.0.0.1:22
 [dropbear]
-aceptar = 444
-conectar = 127.0.0.1:44
+accept = 444
+connect = 127.0.0.1:44
 [dropbear]
-aceptar = 777
-conectar = 127.0.0.1:77
-FIN
+accept = 777
+connect = 127.0.0.1:77
+END
 
 echo "=================  Creando Certificado OpenSSL ======================"
 echo "========================================================="
-# Crear certificado
+# Creando certificado
 openssl genrsa -out key.pem 2048
 openssl req -new -x509 -key key.pem -out cert.pem -days 1095 \
--subj "/C=$país/ST=$estado/L=$localidad/O=$organización/OU=$unidadorganizativa/CN=$nombrecorporativo/emailAddress=$correo"
+-subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
 cat key.pem cert.pem >> /etc/stunnel/stunnel.pem
 
 # Configuración de stunnel
